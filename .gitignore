@@ -1,0 +1,25 @@
+# .gitignore
+.env
+.terraform
+*.tfstate
+*.tfstate.* //<-- all tfstate extensions
+.DS_Store  
+*.lock.hcl
+*.backup
+
+# Ignore all files in compose, except .gitkeep
+compose/*
+!compose/.gitkeep
+
+# Ignore all files within the config directory
+config/*.*
+
+# Ignore all files within subfolders of the config directory
+config/*/*.*
+
+# Don't ignore .gitkeep files within subdirectories of the 'config' directory
+!config/*/.gitkeep
+!config/*/*/.gitkeep
+
+# Don't ignore app.example.yml file within the config directory
+!config/app.example.yml

@@ -1,0 +1,63 @@
+---
+app:
+  name: AppName
+  domain: example.com
+  subdomain: app
+render_protect: false
+server:
+  ip_address: xxx.xxx.xxx.xxx
+  user: server-user
+ssl:
+  enabled: true
+mode:
+  env: production
+  log: debug
+  jwt: RS256
+images:
+  db: postgis/postgis
+  rabbitmq: rabbitmq:version-management
+  vault: vault:version
+  proxy: traefik:version
+  gateway: envoyproxy/envoy:version
+  api: quay.io/org-name/api
+  admin: quay.io/org-name/admin
+  socket: websocket:version
+  mailer: quay.io/org-name/mailer-service
+  notification: quay.io/org-name/notification-service
+database:
+  adapter: postgis
+  host: db
+  port: 5432
+  user: db-user
+  password: db-password
+vault:
+  address: http://vault:8200
+  root_token: vault-root-token
+  spa_token: vault-spa-token
+rabbitmq:
+  host: rabbitmq
+  port: 5672
+  user: rmq-user
+  pass: rmq-pass
+  url: amqp://rmq-user:rmq-pass@rabbitmq:5672/
+google:
+  clientid: google-client-id
+  clientsecret: google-client-secret
+storage:
+  version: 4
+  access_key: storage-access-key
+  secret_key: storage-secret-key
+  region: region-name
+  endpoint: https://storage-endpoint
+  path: true
+  bucket: storage-bucket
+smtp:
+  host: smtp-host
+  port: smtp-port
+  user: smtp-user
+  password: smtp-password
+  sender_email: sender-email
+  sender_name: sender-name
+  sender_logo: sender-logo-url
+notification:
+  server_key: notification-server-key

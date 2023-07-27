@@ -1,0 +1,80 @@
+version: '3.6'
+
+services:
+  db:
+    restart: always
+    image: "<%= @config['images']['db'] %>"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=<%= @config['database']['user'] %>
+      - POSTGRES_PASSWORD=<%= @config['database']['password'] %>
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+
+  rabbitmq:
+    image: "<%= @config['images']['rabbitmq'] %>"
+    restart: always
+    ports:
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+
+  mailer:
+    image: "<%= @config['images']['mailer'] %>"
+    restart: always
+    env_file:
+      - ../config/mailer.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+
+  notification:
+    image: "<%= @config['images']['notification'] %>"
+    restart: always
+    env_file:
+      - ../config/notification.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+
+  socket:
+    restart: always
+    image: "<%= @config['images']['socket'] %>"
+    env_file:
+      - ../config/socket.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+
+  vault:
+    image: "<%= @config['images']['vault'] %>"
+    restart: always
+    volumes:
+      - vault_data:/vault
+      - ../config/vault:/tmp/policies
+    command:
+      - server
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_LOCAL_CONFIG: '{"storage": {"file": { "path": "/vault/data" }}, "listener": {"tcp":{"address": "0.0.0.0:8200","tls_disable":"1"}}}'
+      VAULT_ADDR: http://vault:8200
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+
+volumes:
+  db_data:
+  rabbitmq_data:
+  vault_data:

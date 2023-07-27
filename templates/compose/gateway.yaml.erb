@@ -1,0 +1,16 @@
+version: '3.6'
+
+services:
+  gateway:
+    restart: always
+    image: "<%= @config['images']['gateway'] %>"
+    volumes:
+      - ../config/gateway:/etc/envoy/
+    command: /usr/local/bin/envoy -l info -c /etc/envoy/envoy.yaml
+    labels:
+      - "traefik.http.routers.gateway-<%= @name %>.rule=Host(`<%= @config['app']['subdomain'] %>.<%= @config['app']['domain'] %>`) && PathPrefix(`/api`,`/admin`,`/assets/`)"
+      - "traefik.enable=true"
+      - "traefik.http.services.gateway-<%= @name %>.loadbalancer.server.port=8099"
+      - "traefik.http.routers.gateway-<%= @name %>.entrypoints=websecure"
+      - "traefik.http.routers.gateway-<%= @name %>.tls=true"
+      - "traefik.http.routers.gateway-<%= @name %>.tls.certresolver=myresolver"
